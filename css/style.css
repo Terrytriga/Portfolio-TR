@@ -205,13 +205,14 @@ textarea {
   background: linear-gradient(to right, rgba(var(--main-color), 0.8), rgba(var(--main-color), 0.8) ), url(../../assets/svg/common-bg.svg);
   background-position: center;
   height: 100vh;
-  min-height: 80rem;
-  max-height: 120rem;
+  min-height: 60rem;
+  max-height: 100rem;
   position: relative; }
   @media only screen and (max-width: 37.5em) {
     .home-hero {
-      height: unset;
-      min-height: unset; } }
+      height: auto;
+      min-height: 100vh;
+      padding: 6rem 0; } }
   .home-hero__socials {
     position: absolute;
     top: 50%;
@@ -312,7 +313,11 @@ textarea {
   .projects__row-img {
     width: 100%;
     display: block;
-    object-fit: cover; }
+    object-fit: cover;
+    max-height: 80vh;
+    @media only screen and (max-width: 37.5em) {
+      max-height: 50vh;
+    } }
   .projects__row-content {
     padding: 2rem 0;
     display: flex;
@@ -396,7 +401,8 @@ textarea {
 .project-details__content-main {
   width: 100%;
   max-width: 70rem;
-  margin: auto; }
+  margin: auto;
+  padding: 0 2rem; }
 
 .project-details__desc {
   margin: 0 0 7rem 0; }
@@ -428,7 +434,8 @@ textarea {
     @media only screen and (max-width: 37.5em) {
       .project-details__links-btn {
         margin-right: 0;
-        width: 70%;
+        width: auto;
+        min-width: 48%;
         margin-bottom: 2rem;
         text-align: center; } }
     .project-details__links-btn:last-child {
@@ -526,12 +533,8 @@ textarea {
     -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1); }
     .header__sm-menu--active {
-      visibility: hidden;
-      opacity: 0; }
-      @media only screen and (max-width: 37.5em) {
-        .header__sm-menu--active {
-          visibility: visible;
-          opacity: 1; } }
+      visibility: visible;
+      opacity: 1; }
   .header__sm-menu-link a {
     display: block;
     text-decoration: none;
