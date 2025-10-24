@@ -1,10 +1,15 @@
-// Reveal animations for sections
+// Reveal animations for sections with performance optimizations
 const revealElements = document.querySelectorAll('.projects__row, .skills__skill');
 const observerOptions = {
   root: null,
   threshold: 0.1,
-  rootMargin: '0px'
+  rootMargin: '20px'
 };
+
+// Add will-change property for better performance
+revealElements.forEach(element => {
+  element.style.willChange = 'opacity, transform';
+});
 
 const revealOnScroll = new IntersectionObserver((entries, observer) => {
   entries.forEach(entry => {
