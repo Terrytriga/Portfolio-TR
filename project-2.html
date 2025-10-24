@@ -4,11 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Case Study of Project 1</title>
-    <meta name="description" content="Case study page of Project" />
-    <link rel="stylesheet" href="css/style.css" />
+    <title>Van Life Project - Thereso Mokoena</title>
+    <meta name="description" content="Case study of the Van Life project - A React-based camper van rental platform" />
+    <link rel="stylesheet" href="/css/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Ensure proper mobile handling -->
+    <meta name="theme-color" content="#000000" />
+    <link rel="canonical" href="https://your-portfolio-url.com/project-2.html" />
     <link
       href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap"
       rel="stylesheet"
@@ -20,7 +23,7 @@
         <div class="header__logo-container">
           <div class="header__logo-img-cont">
             <img
-              src="./assets/img/avatar.jpeg"
+              src="/assets/img/avatar.jpeg"
               alt="Ram Maheshwari Logo Image"
               class="header__logo-img"
             />
@@ -30,28 +33,28 @@
         <div class="header__main">
           <ul class="header__links">
             <li class="header__link-wrapper">
-              <a href="./index.html" class="header__link"> Home </a>
+              <a href="/index.html" class="header__link"> Home </a>
             </li>
             <li class="header__link-wrapper">
-              <a href="./index.html#projects" class="header__link">
+              <a href="/index.html#projects" class="header__link">
                 Projects
               </a>
             </li>
              <li class="header__link-wrapper">
-              <a href="./index.html#about" class="header__link">About </a>
+              <a href="/index.html#about" class="header__link">About </a>
             </li>
             <li class="header__link-wrapper">
-              <a href="./index.html#contact" class="header__link"> Contact </a>
+              <a href="/index.html#contact" class="header__link"> Contact </a>
             </li>
           </ul>
           <div class="header__main-ham-menu-cont">
             <img
-              src="./assets/svg/ham-menu.svg"
+              src="/assets/svg/ham-menu.svg"
               alt="hamburger menu"
               class="header__main-ham-menu"
             />
             <img
-              src="./assets/svg/ham-menu-close.svg"
+              src="/assets/svg/ham-menu-close.svg"
               alt="hamburger menu close"
               class="header__main-ham-menu-close d-none"
             />
@@ -62,19 +65,19 @@
         <div class="header__sm-menu-content">
           <ul class="header__sm-menu-links">
             <li class="header__sm-menu-link">
-              <a href="./index.html"> Home </a>
+              <a href="/index.html" data-nav="home"> Home </a>
             </li>
 
             <li class="header__sm-menu-link">
-              <a href="./index.html#projects"> Projects </a>
+              <a href="/index.html#projects" data-nav="projects"> Projects </a>
             </li>
 
             <li class="header__sm-menu-link">
-              <a href="./index.html#about"> About </a>
+              <a href="/index.html#about" data-nav="about"> About </a>
             </li>
 
             <li class="header__sm-menu-link">
-              <a href="./index.html#contact"> Contact </a>
+              <a href="/index.html#contact" data-nav="contact"> Contact </a>
             </li>
           </ul>
         </div>
@@ -208,6 +211,12 @@
         </div>
       </div>
     </footer>
-    <script src="./index.js"></script>
+    <script src="/index.js"></script>
+    <script src="/js/navigation.js"></script>
+    <noscript>
+      <div style="padding: 20px; text-align: center; background: #f8d7da; color: #721c24;">
+        Please enable JavaScript to ensure proper navigation and functionality.
+      </div>
+    </noscript>
   </body>
 </html>

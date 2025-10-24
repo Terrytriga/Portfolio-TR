@@ -16,16 +16,33 @@ WHY DOES NESTING CSS CLASSES WORK HERE??????
 
 */
 
-* {
+:root {
   --n-blue: 0, 98, 185;
   --blue: rgba(0, 98, 185, 0.8);
-  --red: red;
   --purple: rgba(143, 162, 255, 0.8);
   --green: rgba(31, 79, 45, 0.8);
-  --light-green: rgba(101, 146, 74, 0.8);
-  --brown: rgba(129, 104, 8, 0.8);
-  --light-brown: rgba(186, 155, 65, 0.8);
-  --main-color:  var(--n-blue);
+  --main-color: var(--n-blue);
+  
+  /* Light mode colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --text-primary: #333333;
+  --text-secondary: #777777;
+  --border-color: #eeeeee;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --text-primary: #ffffff;
+    --text-secondary: #bbbbbb;
+    --border-color: #2a2a2a;
+  }
+  
+  img {
+    filter: brightness(0.8) contrast(1.2);
+  }
 }
 *,
 *::after,
@@ -35,9 +52,19 @@ WHY DOES NESTING CSS CLASSES WORK HERE??????
   box-sizing: inherit;
   font-family: inherit; }
 
+:root {
+  --transition-standard: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-entrance: 0.5s cubic-bezier(0.0, 0, 0.2, 1);
+  --transition-exit: 0.3s cubic-bezier(0.4, 0, 1, 1);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
 html {
   font-size: 62.5%;
-  scroll-behavior: smooth; }
+  scroll-behavior: smooth;
+  scroll-padding-top: 8rem; }
   @media only screen and (max-width: 75em) {
     html {
       font-size: 59%; } }
@@ -47,15 +74,20 @@ html {
   @media only screen and (min-width: 112.5em) {
     html {
       font-size: 65%; } }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto; } }
 
 body {
   box-sizing: border-box;
   position: relative;
   line-height: 1.5;
-  font-family: sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   overflow-x: hidden;
   overflow-y: scroll;
-  font-family: 'Source Sans Pro', sans-serif; }
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color var(--transition-standard), color var(--transition-standard); }
 
 a {
   text-decoration: none;
@@ -152,26 +184,44 @@ textarea {
   width: 92%; }
 
 .btn {
-  background: #fff;
-  color: #333;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 2px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
-  transition: transform .3s, background-color .3s;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-standard);
   min-height: 4.8rem;
+  position: relative;
+  overflow: hidden;
   -webkit-tap-highlight-color: transparent; }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(var(--main-color), 0.1), rgba(var(--main-color), 0.2));
+    opacity: 0;
+    transition: opacity var(--transition-standard); }
   .btn:hover {
-    transform: translateY(-3px); }
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md); }
+    .btn:hover::before {
+      opacity: 1; }
   .btn:active {
-    transform: translateY(1px); }
+    transform: translateY(1px);
+    box-shadow: var(--shadow-sm); }
   .btn--bg {
     padding: 1.5rem 8rem;
-    font-size: 2rem; }
+    font-size: 2rem;
+    background: rgba(var(--main-color), 0.9);
+    color: #fff; }
     @media only screen and (max-width: 37.5em) {
       .btn--bg {
         padding: 1.5rem 4rem;
@@ -179,12 +229,16 @@ textarea {
         max-width: 32rem; } }
   .btn--med {
     padding: 1.5rem 5rem;
-    font-size: 1.6rem; }
+    font-size: 1.6rem;
+    border: 2px solid rgba(var(--main-color), 0.2); }
     @media only screen and (max-width: 37.5em) {
       .btn--med {
         padding: 1.5rem 3rem;
         width: 100%;
         max-width: 28rem; } }
+  .btn:focus-visible {
+    outline: 3px solid rgba(var(--main-color), 0.5);
+    outline-offset: 2px; }
   .btn--theme {
     background: rgba(var(--main-color), 1);
     color: #fff; }
@@ -313,28 +367,51 @@ textarea {
   grid-template-columns: 1.5fr 1fr;
   grid-gap: 5rem;
   margin-bottom: 11rem;
-  align-items: center; }
+  align-items: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp var(--transition-entrance) forwards; }
   @media only screen and (max-width: 56.25em) {
     .projects__row {
       grid-template-columns: 1fr;
       grid-gap: 3rem;
       margin-bottom: 8rem;
       text-align: center; } }
+  .projects__row:nth-child(2) {
+    animation-delay: 0.2s; }
+  .projects__row:nth-child(3) {
+    animation-delay: 0.4s; }
   .projects__row:last-child {
     margin-bottom: 0; }
   .projects__row-img-cont {
     overflow: hidden;
-    border-radius: 1rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    border-radius: 1.6rem;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-standard), box-shadow var(--transition-standard); }
+    @media (hover: hover) {
+      .projects__row-img-cont:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg); } }
   .projects__row-img {
     width: 100%;
     display: block;
     object-fit: cover;
     aspect-ratio: 16/9;
-    transition: transform 0.3s ease; }
+    transition: transform var(--transition-standard); }
     @media (hover: hover) {
-      .projects__row-img:hover {
-        transform: scale(1.03); } }
+      .projects__row-img-cont:hover .projects__row-img {
+        transform: scale(1.05); } }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
   .projects__row-content {
     padding: 2rem 0;
     display: flex;
@@ -483,6 +560,29 @@ textarea {
     @media only screen and (max-width: 56.25em) {
       .header__content {
         padding: 0 2rem; } }
+
+.theme-toggle {
+    width: 4.4rem;
+    height: 4.4rem;
+    padding: 1rem;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-standard);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 2rem; }
+    .theme-toggle:hover {
+      background: rgba(var(--main-color), 0.1); }
+    .theme-toggle svg {
+      width: 2.4rem;
+      height: 2.4rem;
+      transition: transform var(--transition-standard); }
+    .theme-toggle:hover svg {
+      transform: rotate(45deg); }
   .header__logo-container {
     display: flex;
     align-items: center;
@@ -664,13 +764,26 @@ textarea {
   .skills__skill {
     padding: 1.2rem 2.4rem;
     font-size: 1.6rem;
-    background: rgba(153, 153, 153, 0.2);
-    border-radius: 8px;
+    background: rgba(153, 153, 153, 0.1);
+    border-radius: 12px;
     font-weight: 600;
-    color: #777;
-    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    transition: all var(--transition-standard);
     min-width: 12rem;
-    text-align: center; }
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent; }
+    .skills__skill::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(var(--main-color), 0.1), rgba(var(--main-color), 0.2));
+      opacity: 0;
+      transition: opacity var(--transition-standard); }
     @media only screen and (max-width: 37.5em) {
       .skills__skill {
         padding: 1rem 1.8rem;
@@ -678,8 +791,13 @@ textarea {
         min-width: 10rem; } }
     @media (hover: hover) {
       .skills__skill:hover {
-        background: rgba(153, 153, 153, 0.3);
-        transform: translateY(-2px); } }
+        transform: translateY(-2px);
+        border-color: rgba(var(--main-color), 0.3);
+        box-shadow: var(--shadow-sm); }
+        .skills__skill:hover::before {
+          opacity: 1; } }
+    .skills__skill:active {
+      transform: translateY(1px); }
 
 .mouse {
   width: 25px;

@@ -7,7 +7,7 @@
     <title>Dopefolio</title>
     <meta name="description" content="Portfolio Template for Developer" />
 
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,7 +22,7 @@
         <div class="header__logo-container">
           <div class="header__logo-img-cont">
             <img
-              src="./assets/img/avatar.jpeg"
+              src="/assets/img/avatar.jpeg"
               alt="Ram Maheshwari Logo Image"
               class="header__logo-img"
             />
@@ -32,15 +32,15 @@
         <div class="header__main">
           <ul class="header__links">
             <li class="header__link-wrapper">
-              <a href="./index.html" class="header__link"> Home </a>
+              <a href="/index.html" class="header__link"> Home </a>
             </li>
             <li class="header__link-wrapper">
-              <a href="./index.html#projects" class="header__link">
+              <a href="/index.html#projects" class="header__link">
                 Projects
               </a>
             </li>
             <li class="header__link-wrapper">
-              <a href="./index.html#about" class="header__link">About </a>
+              <a href="/index.html#about" class="header__link">About </a>
             </li>
             <li class="header__link-wrapper">
               <a href="./index.html#contact" class="header__link"> Contact </a>
@@ -350,5 +350,20 @@
     </footer>
 
     <script src="./index.js"></script>
+    <script src="./js/animations.js"></script>
+
+    <!-- Preload key images for performance -->
+    <link rel="preload" href="./assets/img/avatar.jpeg" as="image">
+    
+    <!-- Add ARIA landmarks for better screen reader navigation -->
+    <script>
+      // Add proper ARIA roles and labels
+      document.querySelector('header').setAttribute('role', 'banner');
+      document.querySelector('.home-hero').setAttribute('role', 'main');
+      document.querySelector('.projects').setAttribute('role', 'region');
+      document.querySelector('.about').setAttribute('role', 'region');
+      document.querySelector('.contact').setAttribute('role', 'region');
+      document.querySelector('.main-footer').setAttribute('role', 'contentinfo');
+    </script>
   </body>
 </html>
