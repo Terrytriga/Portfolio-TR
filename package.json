@@ -5,10 +5,13 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:navigation": "node scripts/test-navigation.js"
   },
   "dependencies": {
     "vite": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "puppeteer": "^20.10.0"
+  }
 }

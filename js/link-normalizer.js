@@ -3,7 +3,18 @@
   'use strict';
 
   // Toggle debug logs (set to true to see rewrites in console)
-  const DEBUG = false;
+  // You can enable per-session debug by adding `?ln_debug=1` to the URL.
+  let DEBUG = false;
+  try {
+    if (typeof window !== 'undefined' && window.location && window.location.search) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('ln_debug') === '1') DEBUG = true;
+    }
+  } catch (err) { /* ignore */ }
+  // Force debug for temporary production troubleshooting. Set to false to disable.
+  // NOTE: This is enabled now per request; remove or set to false when finished.
+  const FORCE_DEBUG = true;
+  DEBUG = DEBUG || FORCE_DEBUG;
 
   // Determine deployment base path. For Netlify/custom domains -> '' (root).
   // For GitHub Pages where project is served under /<user>/<repo>/, detect and use '/<user>/<repo>'
@@ -83,6 +94,14 @@
           // Prevent default navigation and navigate programmatically to
           // avoid browser-specific races where updating the anchor's href
           // during the click event might not be honored on some hosts.
+          // Respect modifier keys (open in new tab/window)
+          if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (a.target && a.target === '_blank')){
+            // open in new tab/window
+            window.open(newHref, a.target || '_blank');
+            e.preventDefault();
+            return;
+          }
+
           e.preventDefault();
           window.location.assign(newHref);
         }
@@ -90,7 +109,37 @@
     }
   }
 
-  document.addEventListener('click', function(e){
-    try{ onClick(e); }catch(err){ /* fail safe */ }
-  }, true);
+  // Some mobile browsers start navigation on touchstart/pointerdown before
+  // click fires. Add pointerdown/touchstart handlers (capture, non-passive)
+  // so we can preventDefault early and navigate reliably.
+  function onPointerStart(e){
+    try{
+      // ignore multi-touch and modifier interactions
+      if(e.touches && e.touches.length > 1) return;
+      if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest && e.target.closest('a');
+      if(!a) return;
+      const href = a.getAttribute && a.getAttribute('href');
+      if(!href) return;
+      if(href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+      if(/^(?:\.\/)?project-\d+\.html$|^project-\d+\.html$|^\/project-\d+\.html$/i.test(href)){
+        const newHref = normalizeProjectHref(href);
+        if(newHref && newHref !== href){
+          // If target is _blank or modifier keys used, open in new tab
+          if(a.target === '_blank'){
+            window.open(newHref, '_blank');
+            e.preventDefault();
+            return;
+          }
+          e.preventDefault();
+          window.location.assign(newHref);
+        }
+      }
+    }catch(err){ if(DEBUG) console.error('[link-normalizer] ptr error', err); }
+  }
+
+  // Attach listeners. touchstart must be non-passive to allow preventDefault.
+  document.addEventListener('pointerdown', function(e){ try{ onPointerStart(e); }catch(err){ } }, true);
+  document.addEventListener('touchstart', function(e){ try{ onPointerStart(e); }catch(err){ } }, { capture: true, passive: false });
+  document.addEventListener('click', function(e){ try{ onClick(e); }catch(err){ } }, true);
 })();

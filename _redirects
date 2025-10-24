@@ -1,0 +1,6 @@
+/*    /index.html   200
+
+# SPA / fallback rule ensures Netlify serves index.html for unknown paths so
+# client-side routing or rewritten links won't produce a 404.
+# Note: Keep this file in the repo root; Netlify reads it on deploy.
+
