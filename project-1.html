@@ -30,20 +30,20 @@
         <div class="header__main">
           <ul class="header__links">
             <li class="header__link-wrapper">
-              <a href="./index.html" class="header__link"> Home </a>
+              <a href="index.html" class="header__link"> Home </a>
             </li>
             <li class="header__link-wrapper">
-              <a href="./index.html#projects" class="header__link">
+              <a href="index.html#projects" class="header__link">
                 Projects
               </a>
             </li>
             
             <li class="header__link-wrapper">
-              <a href="./index.html#about" class="header__link">About </a>
+              <a href="index.html#about" class="header__link">About </a>
             </li>
             
             <li class="header__link-wrapper">
-              <a href="./index.html#contact" class="header__link"> Contact </a>
+              <a href="index.html#contact" class="header__link"> Contact </a>
             </li>
           </ul>
           <div class="header__main-ham-menu-cont">
@@ -64,20 +64,20 @@
         <div class="header__sm-menu-content">
           <ul class="header__sm-menu-links">
             <li class="header__sm-menu-link">
-              <a href="./index.html"> Home </a>
+              <a href="index.html"> Home </a>
             </li>
             
              <li class="header__sm-menu-link">
-              <a href="./index.html#projects"> Projects: Assembly EndGame </a>
+              <a href="index.html#projects"> Projects: Assembly EndGame </a>
             </li>
 
             <li class="header__sm-menu-link">
-              <a href="./index.html#about"> About </a>
+              <a href="index.html#about"> About </a>
             </li>
 
            
             <li class="header__sm-menu-link">
-              <a href="./index.html#contact"> Contact </a>
+              <a href="index.html#contact"> Contact </a>
             </li>
           </ul>
         </div>
@@ -141,13 +141,13 @@
               <a
                 href="https://assembly-endgametr.netlify.app/"
                 class="btn btn--med btn--theme project-details__links-btn"
-                target="_blank"
+                target="_blank" rel="noopener noreferrer"
                 >Live Link</a
               >
               <a
-                href="#"
+                href="javascript:void(0);"
                 class="btn btn--med btn--theme-inv project-details__links-btn"
-                target="_blank"
+                aria-disabled="true"
                 >Code Link</a
               >
             </div>
@@ -163,35 +163,35 @@
               <span>Social</span>
             </h2>
             <div class="main-footer__social-cont">
-              <a target="_blank" rel="noopener noreferrer" href="#">
+              <a href="javascript:void(0);" aria-disabled="true">
                 <img
                   class="main-footer__icon"
                   src="./assets/img/linkedin-ico.png"
                   alt="icon"
                 />
               </a>
-              <a target="_blank" rel="noopener noreferrer" href="#">
+              <a href="javascript:void(0);" aria-disabled="true">
                 <img
                   class="main-footer__icon"
                   src="./assets/img/github-ico.png"
                   alt="icon"
                 />
               </a>
-              <a target="_blank" rel="noopener noreferrer" href="#">
+              <a href="javascript:void(0);" aria-disabled="true">
                 <img
                   class="main-footer__icon"
                   src="./assets/img/twitter-ico.png"
                   alt="icon"
                 />
               </a>
-              <a target="_blank" rel="noopener noreferrer" href="#">
+              <a href="javascript:void(0);" aria-disabled="true">
                 <img
                   class="main-footer__icon"
                   src="./assets/img/yt-ico.png"
                   alt="icon"
                 />
               </a>
-              <a target="_blank" rel="noopener noreferrer" href="#">
+              <a href="javascript:void(0);" aria-disabled="true">
                 <img
                   class="main-footer__icon main-footer__icon--mr-none"
                   src="./assets/img/insta-ico.png"
@@ -216,6 +216,8 @@
         </div>
       </div>
     </footer>
-    <script src="./index.js"></script>
+    <script src="js/link-normalizer.js"></script>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/animations.js"></script>
   </body>
 </html>
