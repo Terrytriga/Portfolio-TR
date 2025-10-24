@@ -12,6 +12,6 @@
     "vite": "latest"
   },
   "devDependencies": {
-    "puppeteer": "^20.10.0"
+    "puppeteer": "^19.11.1"
   }
 }
