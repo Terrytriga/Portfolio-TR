@@ -55,11 +55,15 @@
     const base = getBasePath();
 
     // Compose final path. If base is empty -> '/project-N.html'
-    const normalized = (base ? base : '') + '/' + file;
-    const final = normalized.replace(/\/\/+/, '/');
+    const normalizedPath = (base ? base : '') + '/' + file;
+    const cleanedPath = normalizedPath.replace(/\/\/+/ , '/');
 
-    if(DEBUG) console.info('[link-normalizer] rewrite', href, '->', final);
-    return final;
+    // Return an absolute URL (origin + path). Returning an absolute URL
+    // avoids other scripts that prefix leading-slash hrefs from producing
+    // double-prefixed paths, and is more reliable across browsers/hosts.
+    const absolute = window.location.origin.replace(/\/$/, '') + cleanedPath;
+    if(DEBUG) console.info('[link-normalizer] rewrite', href, '->', absolute);
+    return absolute;
   }
 
   function onClick(e){
@@ -76,7 +80,11 @@
       try{
         const newHref = normalizeProjectHref(href);
         if(newHref && newHref !== href){
-          a.setAttribute('href', newHref);
+          // Prevent default navigation and navigate programmatically to
+          // avoid browser-specific races where updating the anchor's href
+          // during the click event might not be honored on some hosts.
+          e.preventDefault();
+          window.location.assign(newHref);
         }
       }catch(err){ if(DEBUG) console.error('[link-normalizer] error', err); }
     }
