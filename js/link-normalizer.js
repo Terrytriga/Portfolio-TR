@@ -12,8 +12,8 @@
     }
   } catch (err) { /* ignore */ }
   // Force debug for temporary production troubleshooting. Set to false to disable.
-  // NOTE: This is enabled now per request; remove or set to false when finished.
-  const FORCE_DEBUG = true;
+  // NOTE: This was enabled temporarily; turned off for production.
+  const FORCE_DEBUG = false;
   DEBUG = DEBUG || FORCE_DEBUG;
 
   // Determine deployment base path. For Netlify/custom domains -> '' (root).

@@ -1,0 +1,37 @@
+name: Post-deploy Navigation Test
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  navigation-test:
+    name: Run mobile navigation test (Puppeteer)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run navigation test (mobile emulation)
+        env:
+          URL: https://tr-mokoena-project.netlify.app/
+          MOBILE_DEVICE: "iPhone X"
+        run: |
+          npm run test:navigation
