@@ -83,13 +83,17 @@
     const href = a.getAttribute('href');
     if(!href) return;
 
-    // noop for anchors and mailto/tel
-    if(href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+  // allow hash-prefixed project links like '#project-1.html' (some hosts rewrite hrefs to hashes)
+  const isHashProject = /^#project-\d+\.html$/i.test(href);
+  // noop for anchors (unless it's a hash-project which we want to handle), and mailto/tel
+  if((href.startsWith('#') && !isHashProject) || href.startsWith('mailto:') || href.startsWith('tel:')) return;
 
-    // only handle project page links
-    if(/^(?:\.\/)?project-\d+\.html$|^project-\d+\.html$|^\/project-\d+\.html$/i.test(href)){
+    // only handle project page links (allow '#project-N.html' too)
+    if(/^(?:\.\/)?project-\d+\.html$|^project-\d+\.html$|^\/project-\d+\.html$|^#project-\d+\.html$/i.test(href)){
       try{
-        const newHref = normalizeProjectHref(href);
+        // If href is a hash-prefixed project (e.g. #project-1.html) strip the leading '#'
+        const hrefToNormalize = href.replace(/^#/, '');
+        const newHref = normalizeProjectHref(hrefToNormalize);
         if(newHref && newHref !== href){
           // Prevent default navigation and navigate programmatically to
           // avoid browser-specific races where updating the anchor's href
@@ -121,9 +125,11 @@
       if(!a) return;
       const href = a.getAttribute && a.getAttribute('href');
       if(!href) return;
-      if(href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
-      if(/^(?:\.\/)?project-\d+\.html$|^project-\d+\.html$|^\/project-\d+\.html$/i.test(href)){
-        const newHref = normalizeProjectHref(href);
+      const isHashProject = /^#project-\d+\.html$/i.test(href);
+      if((href.startsWith('#') && !isHashProject) || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+      if(/^(?:\.\/)?project-\d+\.html$|^project-\d+\.html$|^\/project-\d+\.html$|^#project-\d+\.html$/i.test(href)){
+        const hrefToNormalize = href.replace(/^#/, '');
+        const newHref = normalizeProjectHref(hrefToNormalize);
         if(newHref && newHref !== href){
           // If target is _blank or modifier keys used, open in new tab
           if(a.target === '_blank'){
@@ -142,4 +148,49 @@
   document.addEventListener('pointerdown', function(e){ try{ onPointerStart(e); }catch(err){ } }, true);
   document.addEventListener('touchstart', function(e){ try{ onPointerStart(e); }catch(err){ } }, { capture: true, passive: false });
   document.addEventListener('click', function(e){ try{ onClick(e); }catch(err){ } }, true);
+
+  // On DOM ready, rewrite any anchors that were rewritten to '#project-N.html'
+  function fixHashAnchors(){
+    try{
+      document.querySelectorAll('a[href^="#project-"]').forEach(a => {
+        const href = a.getAttribute('href');
+        if(!href) return;
+        const clean = href.replace(/^#/, '');
+        const newHref = normalizeProjectHref(clean);
+        if(newHref && newHref !== href){
+          if(DEBUG) console.info('[link-normalizer] fixing anchor', href, '->', newHref);
+          a.setAttribute('href', newHref);
+        }
+      });
+    }catch(err){ if(DEBUG) console.error('[link-normalizer] fixHashAnchors error', err); }
+  }
+
+  document.addEventListener('DOMContentLoaded', fixHashAnchors);
+  // Run immediately in case this script is loaded after DOMContent or anchors already present
+  try{ fixHashAnchors(); }catch(err){ if(DEBUG) console.error('[link-normalizer] immediate fixHashAnchors error', err); }
+
+  // Observe mutations to catch scripts that rewrite hrefs after load
+  try{
+    const mo = new MutationObserver(muts => {
+      for(const m of muts){
+        if(m.type === 'attributes' && m.attributeName === 'href' && m.target && m.target.getAttribute){
+          const el = m.target;
+          const val = el.getAttribute('href');
+          if(val && /^#project-\d+\.html$/i.test(val)){
+            const clean = val.replace(/^#/, '');
+            const newHref = normalizeProjectHref(clean);
+            if(newHref && newHref !== val){
+              if(DEBUG) console.info('[link-normalizer] mutation-fix', val, '->', newHref);
+              el.setAttribute('href', newHref);
+            }
+          }
+        }
+        if(m.type === 'childList' && m.addedNodes && m.addedNodes.length){
+          // run fixer in case new anchors were added
+          fixHashAnchors();
+        }
+      }
+    });
+    mo.observe(document.documentElement || document.body, { attributes: true, childList: true, subtree: true, attributeFilter: ['href'] });
+  }catch(err){ if(DEBUG) console.error('[link-normalizer] MutationObserver error', err); }
 })();

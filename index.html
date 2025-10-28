@@ -17,6 +17,23 @@
   <link rel="stylesheet" href="css/responsive.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <script>
+      // Early handler: intercept clicks on anchors that were rewritten to '#project-N.html'
+      (function(){
+        function getBase(){
+          try{ const p = location.pathname; if(location.hostname.includes('github.io')){ const parts = p.split('/').filter(Boolean); if(parts.length>=2) return '/'+parts[0]+'/'+parts[1]; if(p.includes('Portfolio-TR')) return '/Portfolio-TR'; } if(p.includes('/Portfolio-TR')){ const idx = p.indexOf('/Portfolio-TR'); return p.substring(0, idx + '/Portfolio-TR'.length); } }catch(e){}
+          return '';
+        }
+        function normalize(h){ if(!h) return h; h = h.replace(/^#|^\.\//, ''); h = h.replace(/\/\/+/, '/'); return window.location.origin.replace(/\/$/, '') + (getBase() ? getBase() : '') + '/' + h.replace(/^\//,''); }
+        document.addEventListener('click', function(e){
+          try{
+            var a = e.target.closest && e.target.closest('a'); if(!a) return; var href = a.getAttribute && a.getAttribute('href'); if(!href) return; if(/^#project-\d+\.html$/i.test(href)){
+              e.preventDefault(); var dest = normalize(href); window.location.assign(dest);
+            }
+          }catch(err){}
+        }, true);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap"

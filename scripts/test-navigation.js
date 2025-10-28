@@ -4,12 +4,18 @@ const puppeteer = require('puppeteer');
   const target = process.env.URL || 'http://localhost:5173/';
   console.log('Navigation test target:', target);
 
-  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  // Use the new headless mode and increase robustness for slow production builds
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: 'new',
+  });
   const page = await browser.newPage();
-  page.setDefaultNavigationTimeout(15000);
+  // Increase navigation timeout to 60s to avoid flaky timeouts on slow hosts
+  page.setDefaultNavigationTimeout(60000);
 
   try {
-    await page.goto(target, { waitUntil: 'networkidle2' });
+    // Use load instead of networkidle2 which can hang on some CDNs.
+    await page.goto(target, { waitUntil: 'load', timeout: 60000 });
 
     // Find all project 'Learn more' links
     const links = await page.$$eval('a', anchors =>
@@ -23,15 +29,16 @@ const puppeteer = require('puppeteer');
     for (let i = 0; i < links.length; i++) {
       const selector = `a[href*="project-${i+1}.html"]`;
       console.log('\nClicking', selector);
-      const [response] = await Promise.all([
-        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 10000 }).catch(e => null),
-        page.click(selector).catch(e => { console.error('click error', e); })
+      // Click and wait for navigation (longer timeout)
+      await Promise.all([
+        page.click(selector).catch(e => { console.error('click error', e); }),
+        page.waitForNavigation({ waitUntil: 'load', timeout: 60000 }).catch(e => null),
       ]);
 
       console.log('After click URL:', page.url());
 
       // Go back to the index page for the next iteration
-      await page.goto(target, { waitUntil: 'networkidle2' });
+      await page.goto(target, { waitUntil: 'load', timeout: 60000 });
     }
 
     console.log('\nNavigation test completed successfully');
