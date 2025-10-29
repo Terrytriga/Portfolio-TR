@@ -33,6 +33,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Ensure jq is available
+        run: |
+          # jq is used to parse Netlify API JSON. Install if missing.
+          if ! command -v jq >/dev/null 2>&1; then
+            sudo apt-get update && sudo apt-get install -y jq
+          else
+            echo "jq already installed"
+          fi
+
       - name: Wait for Netlify deploy to become ready
         # We avoid using `if:` with secrets here to keep the workflow lint happy.
         # This script reads the secrets into local variables and skips waiting if not provided.
