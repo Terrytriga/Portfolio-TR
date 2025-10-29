@@ -29,17 +29,18 @@ const puppeteer = require('puppeteer');
     // Use load instead of networkidle2 which can hang on some CDNs.
     await page.goto(target, { waitUntil: 'load', timeout: 60000 });
 
-    // Find all project 'Learn more' links
+    // Find all project 'Learn more' links (support both '/project-1' and 'project-1.html')
     const links = await page.$$eval('a', anchors =>
       anchors
-        .filter(a => /project-\d+\.html/i.test(a.getAttribute('href') || ''))
+        .filter(a => /(project-\d+)(?:\.html)?/i.test(a.getAttribute('href') || ''))
         .map(a => ({ href: a.getAttribute('href'), text: a.textContent.trim() }))
     );
 
     console.log('Found project links:', links);
 
     for (let i = 0; i < links.length; i++) {
-      const selector = `a[href*="project-${i+1}.html"]`;
+  // Support selectors that may or may not include the `.html` suffix
+  const selector = `a[href*="project-${i+1}"]`;
       console.log('\nClicking', selector);
       // Click and wait for navigation (longer timeout)
       await Promise.all([
