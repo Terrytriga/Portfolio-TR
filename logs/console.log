@@ -1,0 +1,56 @@
+Collecting console logs for https://tr-mokoena-project.netlify.app/
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/css/mobile-optimizations.css net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/mobile-nav.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/animations.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/link-normalizer.js net::ERR_ABORTED
+[console:error] 
+[console:error] 
+Visiting https://tr-mokoena-project.netlify.app/project-1
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/link-normalizer.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/mobile-nav.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/animations.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/css/style.css net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/css/responsive.css net::ERR_ABORTED
+[console:error] 
+[console:error] 
+Visiting https://tr-mokoena-project.netlify.app/project-2
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/css/style.css net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/css/responsive.css net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/link-normalizer.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/animations.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/mobile-nav.js net::ERR_ABORTED
+[console:error] 
+[console:error] 
+Visiting https://tr-mokoena-project.netlify.app/project-3
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/css/responsive.css net::ERR_ABORTED
+[console:error] 
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/link-normalizer.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/animations.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/js/mobile-nav.js net::ERR_ABORTED
+[console:error] 
+[requestfailed] GET https://tr-mokoena-project.netlify.app/css/style.css net::ERR_ABORTED
+[console:error] 
+
+Summary:
+{
+  "error": 27,
+  "requestfailed": 19
+}

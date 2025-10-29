@@ -1,0 +1,117 @@
+/* Mobile-first responsive stylesheet
+   Adds base (mobile) styles, then scales up using min-width queries.
+   Breakpoints:
+   - 600px (tablet portrait)
+   - 900px (tablet landscape)
+   - 1200px (desktop)
+*/
+
+/* Base: mobile (0 - 599px) */
+:root {
+  --container-pad: 4%;
+}
+
+html { font-size: 56%; }
+body { font-size: 1.6rem; }
+
+/* Header - mobile: stacked */
+.header__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.6rem 0;
+}
+.header__logo-container { display: flex; align-items: center; gap: 1rem; }
+.header__logo-img { width: 5.2rem; height: 5.2rem; object-fit: cover; border-radius: 50%; }
+.header__logo-sub { font-weight: 700; font-size: 1.8rem; }
+
+/* Hide desktop nav on small screens and show hamburger */
+.header__main { display: none; }
+.header__main-ham-menu-cont { display: block; cursor: pointer; }
+.header__main-ham-menu, .header__main-ham-menu-close { width: 3.2rem; height: 3.2rem; }
+
+/* Mobile menu (off-canvas) */
+.header__sm-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 86%;
+  max-width: 360px;
+  transform: translateX(100%);
+  transition: transform .28s ease-in-out;
+  background: #fff;
+  z-index: 1200;
+  box-shadow: -12px 0 30px rgba(0,0,0,0.15);
+  padding: 4rem 2.4rem;
+}
+.header__sm-menu--active { transform: translateX(0); }
+.header__sm-menu-links { display: flex; flex-direction: column; gap: 1.6rem; }
+.header__sm-menu-links a { font-size: 1.8rem; padding: 1rem 0; display: block; }
+
+/* Hero - make content flow naturally on mobile */
+.home-hero {
+  min-height: auto;
+  padding: 6rem 0;
+  background-size: cover;
+}
+.home-hero__content { position: static; transform: none; padding: 0 0 2.4rem 0; }
+.heading-primary { font-size: 3.6rem; text-align: left; }
+.home-hero__info { margin-top: 1.6rem; }
+.home-hero__cta .btn { width: 100%; display: block; text-align: center; }
+
+/* Projects: stacked cards on mobile */
+.projects__content { display: block; }
+.projects__row { display: block; margin-bottom: 5.6rem; }
+.projects__row-img { width: 100%; height: auto; max-height: 40vh; object-fit: cover; }
+.projects__row-content { align-items: flex-start; padding-top: 1.6rem; }
+.projects__row-content-title { font-size: 2.2rem; }
+.projects__row-content-desc { font-size: 1.6rem; color: #666; }
+.btn--med { padding: 1.2rem 2.4rem; font-size: 1.6rem; }
+
+/* About & contact stacking */
+.about__content { display: block; }
+
+/* Footer adjustments */
+.main-footer { padding: 4rem 0; }
+.main-footer__icon { width: 3.2rem; }
+
+/* Accessibility - increase tappable areas */
+a.btn, a.header__sm-menu-links a { touch-action: manipulation; }
+
+/* Tablet portrait and up */
+@media (min-width: 600px) {
+  :root { --container-pad: 4%; }
+  html { font-size: 62.5%; }
+  .header__main { display: block; }
+  .header__main-ham-menu-cont { display: none; }
+  .header__main .header__links { display: flex; gap: 2.4rem; }
+
+  .home-hero { padding: 8rem 0; }
+  .heading-primary { font-size: 4.8rem; text-align: center; }
+
+  .projects__row { display: grid; grid-template-columns: 1fr; grid-gap: 2.4rem; margin-bottom: 8rem; }
+  .projects__row-img { max-height: 45vh; }
+}
+
+/* Tablet landscape and up */
+@media (min-width: 900px) {
+  .main-container { width: 92%; max-width: 1100px; }
+  .projects__row { grid-template-columns: 1.5fr 1fr; grid-gap: 4.8rem; margin-bottom: 8rem; }
+  .heading-primary { font-size: 6rem; }
+  .projects__row-content-title { font-size: 2.8rem; }
+  .projects__row-content-desc { font-size: 1.8rem; }
+  .btn--bg { padding: 1.6rem 6rem; }
+}
+
+/* Desktop and up */
+@media (min-width: 1200px) {
+  .main-container { max-width: 1200px; }
+  .home-hero { min-height: 60vh; }
+  .projects__row-img { max-height: 70vh; }
+}
+
+/* Large desktop */
+@media (min-width: 1800px) {
+  html { font-size: 65%; }
+}
