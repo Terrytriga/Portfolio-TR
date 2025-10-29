@@ -1,6 +1,10 @@
-/*    /index.html   200
+ /project-1    /project-1.html   200
+ /project-2    /project-2.html   200
+ /project-3    /project-3.html   200
 
 # SPA / fallback rule ensures Netlify serves index.html for unknown paths so
 # client-side routing or rewritten links won't produce a 404.
-# Note: Keep this file in the repo root; Netlify reads it on deploy.
+# Keep the specific static mappings above the catch-all so those files are
+# served directly if present in the publish directory.
+/*    /index.html   200
 
