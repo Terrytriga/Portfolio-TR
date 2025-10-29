@@ -10,6 +10,18 @@ const puppeteer = require('puppeteer');
     headless: 'new',
   });
   const page = await browser.newPage();
+  // Mobile emulation: set MOBILE_DEVICE env var to a device name from puppeteer.devices (e.g. 'iPhone X')
+  try{
+    const deviceName = process.env.MOBILE_DEVICE;
+    if(deviceName){
+      const devices = puppeteer.devices || require('puppeteer/DeviceDescriptors').devices; // fallback
+      const dev = devices[deviceName] || devices['iPhone X'];
+      if(dev){
+        console.log('Emulating device:', deviceName || 'iPhone X');
+        await page.emulate(dev);
+      }
+    }
+  }catch(err){ console.warn('Mobile emulation not applied', err); }
   // Increase navigation timeout to 60s to avoid flaky timeouts on slow hosts
   page.setDefaultNavigationTimeout(60000);
 

@@ -9,6 +9,10 @@ jobs:
   navigation-test:
     name: Run mobile navigation test (Puppeteer)
     runs-on: ubuntu-latest
+    env:
+      # Default test target (Netlify production URL). Keep here as fallback.
+      URL: https://tr-mokoena-project.netlify.app/
+      MOBILE_DEVICE: "iPhone X"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,9 +33,53 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Wait for Netlify deploy to become ready
+        # We avoid using `if:` with secrets here to keep the workflow lint happy.
+        # This script reads the secrets into local variables and skips waiting if not provided.
+        run: |
+          set -euo pipefail
+          NETLIFY_AUTH_TOKEN="${{ secrets.NETLIFY_AUTH_TOKEN }}"
+          NETLIFY_SITE_ID="${{ secrets.NETLIFY_SITE_ID }}"
+          MAX_WAIT_SECONDS=600
+          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "Netlify secrets not set (NETLIFY_AUTH_TOKEN / NETLIFY_SITE_ID). Skipping wait-for-deploy step."
+            exit 0
+          fi
+          echo "Waiting for latest Netlify deploy to be 'ready' for site: $NETLIFY_SITE_ID"
+          start_ts=$(date +%s)
+          attempt=0
+          sleep_seconds=3
+          while true; do
+            attempt=$((attempt+1))
+            echo "[attempt $attempt] Checking Netlify deploy status..."
+            response=$(curl -s -H "Authorization: Bearer $NETLIFY_AUTH_TOKEN" "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys" )
+            deploy_id=$(echo "$response" | jq -r '.[0].id // empty')
+            deploy_state=$(echo "$response" | jq -r '.[0].state // empty')
+            deploy_url=$(echo "$response" | jq -r '.[0].deploy_ssl_url // .[0].ssl_url // .[0].url // empty')
+            echo "Latest deploy: $deploy_id (state: $deploy_state)"
+            if [ "$deploy_state" = "ready" ]; then
+              if [ -n "$deploy_url" ]; then
+                echo "Deploy ready at $deploy_url"
+                echo "URL=$deploy_url" >> $GITHUB_ENV
+              fi
+              break
+            fi
+            now_ts=$(date +%s)
+            elapsed=$((now_ts - start_ts))
+            if [ $elapsed -ge $MAX_WAIT_SECONDS ]; then
+              echo "Timed out waiting for Netlify deploy after $elapsed seconds"
+              echo "Proceeding to run test against default URL: $URL"
+              break
+            fi
+            echo "Deploy not ready yet (state=$deploy_state). Sleeping $sleep_seconds seconds..."
+            sleep $sleep_seconds
+            sleep_seconds=$((sleep_seconds*2))
+            if [ $sleep_seconds -gt 30 ]; then sleep_seconds=30; fi
+          done
+
       - name: Run navigation test (mobile emulation)
         env:
-          URL: https://tr-mokoena-project.netlify.app/
+          URL: ${{ env.URL }}
           MOBILE_DEVICE: "iPhone X"
         run: |
           npm run test:navigation
